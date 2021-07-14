@@ -23,4 +23,4 @@ export const logger = createLogger({
 		new transports.File({filename: 'error.log', level: 'error'}),
 		new transports.File({filename: 'general.log', level: 'info'}),
 	]
-})
+});

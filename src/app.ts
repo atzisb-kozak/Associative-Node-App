@@ -14,11 +14,29 @@ import { logger } from './logger';
  */
 async function startApolloServer(): Promise<{server: ApolloServer, app: Express} | undefined> {
 	try{
+		/*
+		const loggerPlugin: any = {
+			async requestDidStart(requestContext: any) {
+				logger.info(`Request => ${requestContext.request.query}`);
+
+				return { 
+					async parsingDidStart(requestContext: any) {
+						logger.debug('Parsing started!');
+					},
+					async validationDidStart(requestContext: any) {
+						logger.debug('Validation started!');
+					},
+				};
+			}
+		};*/
 		const connection = await createConnection();
 		const app = express();
 		const server = new ApolloServer({
 			typeDefs,
 			resolvers,
+			/*plugins: [
+				loggerPlugin
+			],*/
 		});
 		await server.start();
 	
