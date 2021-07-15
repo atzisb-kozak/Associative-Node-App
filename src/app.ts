@@ -1,10 +1,13 @@
 /**
  * Import Modules
  */
+import "reflect-metadata";
 import express, { Express } from 'express';
 import { ApolloServer } from 'apollo-server-express';
-import { typeDefs, resolvers } from './schema';
 import { createConnection } from 'typeorm';
+import { SachetResolver } from "./database/resolver/SachetResolver";
+import { buildSchema } from "type-graphql";
+import { EchantionnageResolver } from "./database/resolver/EchantionnageResolver";
 import { logger } from './logger';
 
 /**
@@ -14,30 +17,14 @@ import { logger } from './logger';
  */
 async function startApolloServer(): Promise<{server: ApolloServer, app: Express} | undefined> {
 	try{
-		/*
-		const loggerPlugin: any = {
-			async requestDidStart(requestContext: any) {
-				logger.info(`Request => ${requestContext.request.query}`);
-
-				return { 
-					async parsingDidStart(requestContext: any) {
-						logger.debug('Parsing started!');
-					},
-					async validationDidStart(requestContext: any) {
-						logger.debug('Validation started!');
-					},
-				};
-			}
-		};*/
 		const connection = await createConnection();
+		const schema = await buildSchema({
+			resolvers: [SachetResolver, EchantionnageResolver]
+		})
 		const app = express();
 		const server = new ApolloServer({
-			typeDefs,
-			resolvers,
-			/*plugins: [
-				loggerPlugin
-			],*/
-		});
+			schema
+    });
 		await server.start();
 	
 		server.applyMiddleware({ app });
