@@ -21,6 +21,7 @@
 		"no-var": "error",
 		"no-await-in-loop": "error",
 		"no-async-promise-executor": "error",
-		"max-len": ["error",{"code": 100, "tabWidth": 2}]
+		"max-len": ["error",{"code": 100, "tabWidth": 2}],
+		"semi": ["error", "always"]
 	}
 }

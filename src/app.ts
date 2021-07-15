@@ -1,12 +1,21 @@
+/**
+ * Import Modules
+ */
 import "reflect-metadata";
-import express from 'express';
+import express, { Express } from 'express';
 import { ApolloServer } from 'apollo-server-express';
 import { createConnection } from 'typeorm';
 import { SachetResolver } from "./database/resolver/SachetResolver";
 import { buildSchema } from "type-graphql";
 import { EchantionnageResolver } from "./database/resolver/EchantionnageResolver";
+import { logger } from './logger';
 
-async function startApolloServer() {
+/**
+ * Initialize GraphQL API Server (Apollo)
+ *
+ * @return {*}  {(Promise<{server: ApolloServer, app: Express} | undefined>)}
+ */
+async function startApolloServer(): Promise<{server: ApolloServer, app: Express} | undefined> {
 	try{
 		const connection = await createConnection();
 		const schema = await buildSchema({
@@ -15,16 +24,16 @@ async function startApolloServer() {
 		const app = express();
 		const server = new ApolloServer({
 			schema
-		});
+    });
 		await server.start();
 	
 		server.applyMiddleware({ app });
 	
 		new Promise(resolve => app.listen({ port: 4000 }));
-		console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`);
+		logger.info(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`);
 		return { server, app };
 	} catch (error) {
-		console.error(error);
+		logger.error(error);
 	}
 }
 
