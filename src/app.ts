@@ -1,14 +1,20 @@
+import "reflect-metadata";
 import express from 'express';
 import { ApolloServer } from 'apollo-server-express';
-import { typeDefs, resolvers } from './schema';
 import { createConnection } from 'typeorm';
+import { SachetResolver } from "./database/resolver/SachetResolver";
+import { buildSchema } from "type-graphql";
+import { EchantionnageResolver } from "./database/resolver/EchantionnageResolver";
 
 async function startApolloServer() {
 	try{
+		const connection = await createConnection();
+		const schema = await buildSchema({
+			resolvers: [SachetResolver, EchantionnageResolver]
+		})
 		const app = express();
 		const server = new ApolloServer({
-			typeDefs,
-			resolvers,
+			schema
 		});
 		await server.start();
 	
