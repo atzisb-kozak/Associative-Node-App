@@ -1,6 +1,6 @@
 import { Resolver, Query, Mutation, Arg } from 'type-graphql';
 import { Echantionnage } from '../entity/echantionnage';
-import { CreateEchantionnageInput } from '../input/CreateEchantionnageInput';
+import { CreateEchantionnageInput } from '../input/echantionnage/CreateEchantionnageInput';
 
 @Resolver()
 export class EchantionnageResolver {

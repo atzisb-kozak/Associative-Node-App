@@ -1,4 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
+import {
+	Entity,
+	PrimaryGeneratedColumn,
+	Column,
+	BaseEntity,
+	CreateDateColumn,
+	UpdateDateColumn
+} from "typeorm";
 import { ObjectType, Field, ID } from "type-graphql";
 
 /**
@@ -25,4 +32,12 @@ export class Echantionnage extends BaseEntity {
 	@Field(() => Number)
 	@Column()
 	poidsMeasured: number;
+
+	@Field(() => Date)
+	@CreateDateColumn({ type: 'timestamp' })
+	created_at: Date;
+
+	@Field(() => Date)
+	@UpdateDateColumn({ type: 'timestamp' })
+	updated_at: Date;
 }
