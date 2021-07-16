@@ -1,4 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
+import { 
+	Entity,
+	PrimaryGeneratedColumn,
+	Column,
+	BaseEntity,
+	CreateDateColumn,
+	UpdateDateColumn,
+} from "typeorm";
 import { ObjectType, Field, ID } from "type-graphql";
 
 /**
@@ -19,7 +26,15 @@ export class Sachet extends BaseEntity {
 	@Column()
 	poids: number;
 
-	@Field(() => [Number])
-	@Column("simple-array")
+	@Field(() => [Number], { nullable: true })
+	@Column("simple-array", { nullable: true })
 	combinaison: number[];
+
+	@Field(() => Date)
+	@CreateDateColumn({ type: 'timestamp' })
+	created_at: Date;
+
+	@Field(() => Date)
+	@UpdateDateColumn({ type: 'timestamp' })
+	updated_at: Date;
 }
