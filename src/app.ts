@@ -20,10 +20,12 @@ async function startApolloServer(): Promise<{server: ApolloServer, app: Express}
 		const connection = await createConnection();
 		const schema = await buildSchema({
 			resolvers: [SachetResolver, EchantionnageResolver]
-		})
+		});
 		const app = express();
 		const server = new ApolloServer({
-			schema
+			schema,
+			introspection: process.env.NODE_ENV === 'production',
+			playground: process.env.NODE_ENV === 'production',
     });
 		await server.start();
 	
@@ -33,7 +35,7 @@ async function startApolloServer(): Promise<{server: ApolloServer, app: Express}
 		logger.info(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`);
 		return { server, app };
 	} catch (error) {
-		logger.error(error);
+		logger.error(`[App](startApolloServer) : ${error}`);
 	}
 }
 
