@@ -21,15 +21,16 @@
 		"type-graphql": "^1.1.1",
 		"typedi": "^0.10.0",
 		"typeorm": "^0.2.34",
+		"typeorm-typedi-extensions": "^0.4.1",
 		"winston": "^3.3.3"
 	},
 	"devDependencies": {
-		"apollo-server-testing": "^2.25.2",
 		"@types/node": "^16.3.1",
 		"@types/pg": "^8.6.1",
 		"@types/validator": "^13.6.3",
 		"@typescript-eslint/eslint-plugin": "^4.28.3",
 		"@typescript-eslint/parser": "^4.28.2",
+		"apollo-server-testing": "^2.25.2",
 		"cross-env": "^7.0.3",
 		"eslint": "^7.30.0",
 		"jest": "^27.0.6",
