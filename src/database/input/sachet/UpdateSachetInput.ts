@@ -5,7 +5,7 @@ import { Sachet } from '../../entity/sachet';
 import { InputType, Field } from 'type-graphql';
 
 /**
- *
+ * Input for update existing Sachet's object
  *
  * @export
  * @class UpdateSachetInput

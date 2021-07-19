@@ -34,7 +34,7 @@ export class SachetResolver {
 	}
 
 	/**
-	 *
+	 * Find specific Sachet with ID Field
 	 *
 	 * @param {number} id
 	 * @return {Sachet | undefined} 
@@ -46,7 +46,7 @@ export class SachetResolver {
 	}
 
 	/**
-	 *
+	 * Create new Sachet data to store in database
 	 *
 	 * @param {CreateSachetInput} data
 	 * @return {*} 
@@ -60,7 +60,9 @@ export class SachetResolver {
 	}
 
 	/**
-	 *
+	 * Update specific Sachet's data 
+	 * 
+	 * Raise a UserInputError if data's ID isn't stored in database
 	 *
 	 * @param {number} id
 	 * @param {UpdateSachetInput} data
@@ -86,7 +88,9 @@ export class SachetResolver {
 	}
 
 	/**
-	 *
+	 * Delete Sachet's data in database.
+	 * 
+	 * Raise a UserInputError if data's ID isn't stored in database
 	 *
 	 * @param {number} id
 	 * @return {*} 

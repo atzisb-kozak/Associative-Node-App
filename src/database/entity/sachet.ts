@@ -1,3 +1,6 @@
+/**
+ * Import Modules
+ */
 import { 
 	Entity,
 	PrimaryGeneratedColumn,
@@ -26,10 +29,12 @@ export class Sachet extends BaseEntity {
 	@Column()
 	poids: number;
 
+	// simple array of number store valid combinaison
 	@Field(() => [Number], { nullable: true })
 	@Column("simple-array", { nullable: true })
 	combinaison: number[];
 
+	// Timestamps
 	@Field(() => Date)
 	@CreateDateColumn({ type: 'timestamp' })
 	created_at: Date;
