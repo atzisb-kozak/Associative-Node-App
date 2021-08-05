@@ -1,7 +1,7 @@
 /**
  * Import Modules
  */
-import { InputType, Field } from 'type-graphql';
+import { InputType, Field, Int } from 'type-graphql';
 
 /**
  * Input to create new Echantionnage's object
@@ -12,9 +12,9 @@ import { InputType, Field } from 'type-graphql';
 @InputType()
 export class CreateEchantionnageInput {
 
-	@Field()
+	@Field(() => Int)
 	poidsGenerated: number;
 
-	@Field()
+	@Field(() => Int)
 	poidsMeasured: number;
 }

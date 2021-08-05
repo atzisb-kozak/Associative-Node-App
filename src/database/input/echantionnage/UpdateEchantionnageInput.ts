@@ -2,7 +2,7 @@
  * Import Module
  */
 import { Echantionnage } from '../../entity/echantionnage';
-import { InputType, Field } from 'type-graphql';
+import { InputType, Field, Int } from 'type-graphql';
 
 /**
  * Input for update existing Echantionnage's object
@@ -14,9 +14,9 @@ import { InputType, Field } from 'type-graphql';
 @InputType()
 export class UpdateEchantionnageInput implements Partial<Echantionnage> {
 
-	@Field()
+	@Field(() => Int)
 	poidsGenerated: number;
 
-	@Field()
+	@Field(() => Int)
 	poidsMeasured: number;
 }
