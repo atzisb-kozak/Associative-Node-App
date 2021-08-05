@@ -4,13 +4,13 @@
 # -----------------------------------------------
 
 input CreateEchantionnageInput {
-  poidsGenerated: Float!
-  poidsMeasured: Float!
+  poidsGenerated: Int!
+  poidsMeasured: Int!
 }
 
 input CreateSachetInput {
-  combinaison: [Float!]!
-  poids: Float!
+  combinaison: [Int!]!
+  poids: Int!
 }
 
 """
@@ -29,12 +29,15 @@ type Echantionnage {
 type Mutation {
   createEchantionnage(echantillon: CreateEchantionnageInput!): Echantionnage!
   createSachet(data: CreateSachetInput!): Sachet!
+  deleteEchantionnage(echantionID: ID!): Boolean!
   deleteSachet(sachetID: ID!): Boolean!
+  updateEchantionnage(echantillon: UpdateEchantionnageInput!, echantionID: ID!): Boolean!
   updateSachet(data: UpdateSachetInput!, sachetID: ID!): Boolean!
 }
 
 type Query {
   echantionnage: [Echantionnage!]!
+  echantionnageID(echantionID: ID!): Echantionnage!
   sachet: [Sachet!]!
   sachetID(sachetID: ID!): Sachet!
 }
@@ -47,7 +50,12 @@ type Sachet {
   updated_at: DateTime!
 }
 
+input UpdateEchantionnageInput {
+  poidsGenerated: Int!
+  poidsMeasured: Int!
+}
+
 input UpdateSachetInput {
-  combinaison: [Float!]!
-  poids: Float!
+  combinaison: [Int!]!
+  poids: Int!
 }

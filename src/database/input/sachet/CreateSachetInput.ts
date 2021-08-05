@@ -1,7 +1,7 @@
 /**
  * Import Modules
  */
-import { InputType, Field } from 'type-graphql';
+import { InputType, Field, Int } from 'type-graphql';
 
 /**
  * Input for create new Sachet's object
@@ -12,9 +12,9 @@ import { InputType, Field } from 'type-graphql';
 @InputType()
 export class CreateSachetInput {
 
-	@Field()
+	@Field(() => Int)
 	poids: number
 
-	@Field(() => [Number])
+	@Field(() => [Int])
 	combinaison: number[];
 }

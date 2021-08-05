@@ -34,10 +34,10 @@ export class Echantionnage extends BaseEntity {
 	poidsMeasured: number;
 
 	@Field(() => Date)
-	@CreateDateColumn({ type: 'timestamp' })
+	@CreateDateColumn({ type: 'timestamptz' })
 	created_at: Date;
 
 	@Field(() => Date)
-	@UpdateDateColumn({ type: 'timestamp' })
+	@UpdateDateColumn({ type: 'timestamptz' })
 	updated_at: Date;
 }

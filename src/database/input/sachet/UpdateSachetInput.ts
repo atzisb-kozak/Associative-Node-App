@@ -2,7 +2,7 @@
  * Import Modules
  */
 import { Sachet } from '../../entity/sachet';
-import { InputType, Field } from 'type-graphql';
+import { InputType, Field, Int } from 'type-graphql';
 
 /**
  * Input for update existing Sachet's object
@@ -14,9 +14,9 @@ import { InputType, Field } from 'type-graphql';
 @InputType()
 export class UpdateSachetInput implements Partial<Sachet> {
 
-	@Field()
+	@Field(() => Int)
 	poids?: number
 
-	@Field(() => [Number], {  })
+	@Field(() => [Int], {  })
 	combinaison?: number[];
 }
