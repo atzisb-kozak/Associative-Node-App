@@ -6,7 +6,6 @@ import {
 	CreateDateColumn,
 	UpdateDateColumn
 } from "typeorm";
-import { ObjectType, Field, ID } from "type-graphql";
 
 /**
  * Echantion's representation for Postgres database
@@ -18,26 +17,20 @@ import { ObjectType, Field, ID } from "type-graphql";
  * @extends {BaseEntity}
  */
 @Entity()
-@ObjectType()
 export class Echantionnage extends BaseEntity {
 
-	@Field(() => ID)
 	@PrimaryGeneratedColumn()
 	echantionNumber: number;
 
-	@Field(() => Number)
 	@Column()
 	poidsGenerated: number;
 
-	@Field(() => Number)
 	@Column()
 	poidsMeasured: number;
 
-	@Field(() => Date)
-	@CreateDateColumn({ type: 'timestamp' })
+	@CreateDateColumn({ type: 'timestamptz' })
 	created_at: Date;
 
-	@Field(() => Date)
-	@UpdateDateColumn({ type: 'timestamp' })
+	@UpdateDateColumn({ type: 'timestamptz' })
 	updated_at: Date;
 }

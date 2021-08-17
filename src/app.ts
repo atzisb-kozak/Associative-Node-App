@@ -3,13 +3,12 @@
  */
 import "reflect-metadata";
 import express, { Express } from 'express';
-import { ApolloServer } from 'apollo-server-express';
-import { createConnection, useContainer } from 'typeorm';
-import { SachetResolver } from "./database/resolver/SachetResolver";
-import { buildSchema } from "type-graphql";
-import { EchantionnageResolver } from "./database/resolver/EchantionnageResolver";
+import { ApolloServer, IResolvers } from 'apollo-server-express';
+import { createConnection } from 'typeorm';
+import { loadSchema } from '@graphql-tools/load';
 import { logger } from './logger';
-import { Container } from "typeorm-typedi-extensions";
+import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
+import { makeExecutableSchema } from '@graphql-tools/schema';
 
 /**
  * Initialize GraphQL API Server (Apollo)
@@ -19,12 +18,25 @@ import { Container } from "typeorm-typedi-extensions";
 async function startApolloServer(): Promise<{server: ApolloServer, app: Express} | undefined> {
 	try{
 		// Setup Connection and Schema for Postgres Database
-		useContainer(Container);
 		const connection = await createConnection();
-		const schema = await buildSchema({
-			resolvers: [SachetResolver, EchantionnageResolver],
-			container: Container,
-			emitSchemaFile: true,
+		const typeDefs = await loadSchema('schema.gql', {
+			loaders: [
+				new GraphQLFileLoader()
+			]
+		});
+
+		let sachetResolver = (
+			await import('./database/resolver/SachetResolver')
+		).sachetResolver;
+
+		let echantionnageResolver = (
+			await import('./database/resolver/EchantionnageResolver')
+		).echantionnageResolver;
+
+		const resolvers: IResolvers[] = [sachetResolver, echantionnageResolver];
+		const schema = makeExecutableSchema({
+			typeDefs,
+			resolvers
 		});
 
 		// Initialize Express + Apollo GraphQL Server
@@ -33,7 +45,7 @@ async function startApolloServer(): Promise<{server: ApolloServer, app: Express}
 			schema,
 			introspection: true,
 			playground: true,
-    });
+		});
 		await server.start();
 	
 		server.applyMiddleware({ app });
@@ -49,5 +61,6 @@ async function startApolloServer(): Promise<{server: ApolloServer, app: Express}
 		logger.error(`[App](startApolloServer) : ${error.message}`);
 	}
 }
+
 
 startApolloServer();
