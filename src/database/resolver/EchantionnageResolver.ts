@@ -3,11 +3,46 @@
  */
 import { IResolvers, UserInputError } from 'apollo-server-express';
 import { Repository, getRepository } from 'typeorm';
-import { Echantionnage } from '../entity/echantionnage';
+import { Echantionnage } from '../entity/echantionnage'
+import { EchantionnagePayload } from './EchantionnagePayload';
 import { CreateEchantionnageInput, UpdateEchantionnageInput} from './input';
 import { logger } from '../../logger';
 
 const _echantionnageRepository: Repository<Echantionnage> = getRepository(Echantionnage);
+
+/**
+ * Args for FindOne resolvers
+ *
+ * @interface FindOneEchantionnageArgs
+ */
+interface FindOneEchantionnageArgs {
+	echantionID: number
+}
+/**
+ * Args for Create resolvers
+ *
+ * @interface CreateEchantionnageArgs
+ */
+interface CreateEchantionnageArgs {
+	echantillon: CreateEchantionnageInput;
+}
+/**
+ * Args for Update resolvers
+ *
+ * @interface UpdateEchantionnageArgs
+ */
+interface UpdateEchantionnageArgs {
+	echantionID: number;
+	echantillon: UpdateEchantionnageInput;
+}
+/**
+ * Args for Delete resolvers
+ *
+ * @interface DeleteEchantionnageArgs
+ */
+interface DeleteEchantionnageArgs {
+	echantionID: number;
+}
 
 /**
  * GraphQL Resolvers for Echantionnage's data
@@ -31,27 +66,37 @@ export const echantionnageResolver: IResolvers = {
 		 * Find specific Ecahntionnage with ID Field
 		 *
 		 * @param {number} id
-		 * @return {Sachet | undefined}  {(Promise<Echantionnage | undefined>)}
-		 * @memberof EchantionnageResolver
+		 * @return {Echantionnage | undefined}  {(Promise<Echantionnage | undefined>)}
 		 */
-		echantionnageID: (id : number): Promise<Echantionnage | undefined> => {
+		echantionnageID: (_, args: FindOneEchantionnageArgs): Promise<Echantionnage | undefined> => {
 
-			return _echantionnageRepository.findOne(id);
+			return _echantionnageRepository.findOne(args.echantionID);
 		}
 	},
 	
 	Mutation: {
 		/**
-		 * Create new Ecahntionnage's data to store in database
+		 * Create new Echantionnage's data to store in database
 		 *
 		 * @param {CreateEchantionnageInput} data
-		 * @return {*} 
-		 * @memberof EchantionnageResolver
+		 * @return {EchantionnagePayload} Payload contain data or error, success depends of 
 		 */
-		createEchantionnage: async (data: CreateEchantionnageInput): Promise<Echantionnage> => {
-			const echantionnage = Echantionnage.create(data);
-			await echantionnage.save();
-			return echantionnage;
+		createEchantionnage: async (_, args: CreateEchantionnageArgs): Promise<EchantionnagePayload> => {
+			try{
+				const echantionnage = Echantionnage.create(args.echantillon);
+				await echantionnage.save();
+				return {
+					success: true,
+					data: echantionnage
+				}
+			} catch (error) {
+				logger.error(`[EchantionnageResolver](createEchantionnage) : ${error.message}`)
+				return {
+					success: false,
+					error: error.message
+				}
+			}
+
 		},
 
 		/**
@@ -64,21 +109,28 @@ export const echantionnageResolver: IResolvers = {
 		 * @return {*}  {Promise<boolean>}
 		 * @memberof EchantionnageResolver
 		 */
-		updateEchantionnage: async (id: number, data: UpdateEchantionnageInput): Promise<boolean> => {
+		updateEchantionnage: async (_, args: UpdateEchantionnageArgs): Promise<EchantionnagePayload> => {
 			try {
-				const nbAffect = (await _echantionnageRepository.update(id, {...data})).affected;
+				const nbAffect = (
+					await _echantionnageRepository.update(args.echantionID, {...args.echantillon})).affected;
+
 				if (nbAffect !== 0){
-					return true;
+					return {
+						success: true,
+					}
 				}
 				throw new Error('data wasn\'t stored in database');
 			} catch (error) {
 				logger.error(`[EchantionnageResolver](updateEchantionnage) : ${error.message}`);
-				throw new UserInputError(error.message);
+				return {
+					success: false,
+					error: error.message
+				}
 			}
 		},
 
 		/**
-		 *Update specific Echantionnage's data 
+		* Delete specific Echantionnage's data 
 		* 
 		* Raise a UserInputError if data's ID isn't stored in database
 		*
@@ -86,16 +138,21 @@ export const echantionnageResolver: IResolvers = {
 		* @return {*}  {Promise<boolean>}
 		* @memberof EchantionnageResolver
 		*/
-		deleteEchantionnage: async (id: number): Promise<boolean> => {
+		deleteEchantionnage: async (_, args: DeleteEchantionnageArgs): Promise<EchantionnagePayload> => {
 			try {
-				const nbAffect = (await _echantionnageRepository.delete(id)).affected;
+				const nbAffect = (await _echantionnageRepository.delete(args.echantionID)).affected;
 				if (nbAffect !== 0) {
-					return true;
+					return {
+						success: true
+					};
 				}
 				throw new Error('data wasn\'t stored in database');
 			}catch (error) {
 				logger.error(`[EchantionnageResolver](deleteEchantionnage) : ${error.message}`);
-				throw new UserInputError(error.message);
+				return {
+					success: false,
+					error: error.message
+				}
 			}
 		}
 	}
